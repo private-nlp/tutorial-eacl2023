@@ -299,23 +299,78 @@ Transformation of the dataset $x$ to any object
 \end{frame}
 
 
-\begin{frame}{XXX}
+\begin{frame}{Pure differential privacy}
+
+The trusted curator \textbf{randomizes} the query result
+
+\begin{itemize}
+	\item Counting query: How many person? $f(x) = 3 + \text{value drawn from a certain probability distribution}$
+\end{itemize}
+
+This is called a (randomized) \textbf{mechanism} (algorithm) $\mathcal{M}$ (or $\mathcal{M}(f(x))$, $\mathcal{M}(x)$, $\mathcal{M}(f, x)$, etc.)
+
+\begin{block}{What pure differential privacy guarantees ($\varepsilon \geq 0$)}
+For every pair of neighboring datasets $x, x'$ and for any output $y \in \mathcal{Y}$ of $\mathcal{M}$ and query $f$
+$$
+\frac{
+\Pr \left[ \mathcal{M}(f(x)) = y  \right]
+}{
+\Pr \left[ \mathcal{M}(f(x')) = y  \right]
+}
+\leq \exp(\varepsilon)
+$$
+\end{block}
+
+	
+\end{frame}
+
+\begin{frame}{Pure $(\varepsilon, 0)$ differential privacy}
+	
+\begin{block}{What pure differential privacy guarantees ($\varepsilon \geq 0$)}
+	For every pair of neighboring datasets $x, x'$ and for any output $y \in \mathcal{Y}$ of $\mathcal{M}$ and query $f$
+	$$
+	\frac{
+		\Pr \left[ \mathcal{M}(f(x)) = y  \right]
+	}{
+		\Pr \left[ \mathcal{M}(f(x')) = y  \right]
+	}
+	\leq \exp(\varepsilon)
+	$$
+\end{block}
+
+Privately querying a dataset $x$ with Alice and dataset $x'$ without Alice will give me two results --- and they must be similar up to factor $\exp(\varepsilon)$
+
+Why probabilities $\Pr$? Because of the randomness in $\mathcal{M}$	
+\end{frame}
+
+\section{Basic DP mechanisms}
+
+\begin{frame}{Laplace mechanism for numeric queries}
 	
 \end{frame}
 
 
-\begin{frame}{XXX}
+\begin{frame}{Exponential mechanism for discrete outputs}
 	
 \end{frame}
 
+\section{Approximate DP}
 
-\begin{frame}{XXX}
-	
-\end{frame}
+\begin{frame}{Privacy loss random variable}
+The mechanism $\mathcal{M(f(x))}$ is in fact a \textbf{random variable} parametrized by the query $f$ and the dataset $x$, and as such it has a certain \textbf{probability distribution}
+
+is this even important?
+
+$$
+\frac{
+	\Pr \left[ \mathcal{M}(f(x)) = y  \right]
+}{
+	\Pr \left[ \mathcal{M}(f(x')) = y  \right]
+}
+\leq \exp(\varepsilon)
+$$
 
 
-\begin{frame}{XXX}
-	
 \end{frame}
 
 
