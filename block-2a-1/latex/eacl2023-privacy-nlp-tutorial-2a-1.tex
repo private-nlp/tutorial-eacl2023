@@ -338,7 +338,7 @@ $$
 	$$
 \end{block}
 
-Privately querying a dataset $x$ with Alice and dataset $x'$ without Alice will give me two results --- and they must be similar up to factor $\exp(\varepsilon)$
+Privately querying a dataset $x$ with Alice and dataset $x'$ without Alice will give me two results --- and probabilities of these two results must be similar up to factor $\exp(\varepsilon)$
 
 Why probabilities $\Pr$? Because of the randomness in $\mathcal{M}$	
 \end{frame}
@@ -346,12 +346,119 @@ Why probabilities $\Pr$? Because of the randomness in $\mathcal{M}$
 \section{Basic DP mechanisms}
 
 \begin{frame}{Laplace mechanism for numeric queries}
+
+PDF of the Laplace distribution:
+$$
+\mathrm{Lap}(x; \mu, b) = \frac{1}{2b} \exp \left( - \frac{| x - \mu |}{b} \right)
+$$
+To privatize a query output by adding noise from the Laplace distribution, we need to know the \textbf{scale} $b$.
+
+\begin{block}{Global sensitivity $\Delta f$}
+What is the maximum difference of the query $f$ for any two neighboring datasets $x, x'$
+$$
+\Delta f = \max_{x, x'} | f(x) - f(x')|
+$$
+\end{block}
 	
 \end{frame}
 
+\begin{frame}{Global sensitivity and Laplace mechanism}
+
+\begin{example}
+Sensitivity of the counting query $\Delta f = 1$
+\end{example}
+
+The scale $b$ of the Laplace noise is then proportional to the sensitivity and privacy budget $\varepsilon$:
+$$
+b = \frac{\Delta f}{\varepsilon}
+$$
+
+
+\begin{block}{The Laplace mechanism}
+$$
+\mathcal{M_{\mathrm{Lap}}}(f(x)) = f(x) + z \qquad
+z \sim \textrm{Lap}(\mu = 0; b = \Delta f / \varepsilon)
+$$
+\end{block}
+
+\end{frame}
+
+
+\begin{frame}{Example of the Laplace mechanism for a counting query}
+
+Laplace mechanism satisfies $(\varepsilon)$-DP\footnote{
+Step-by-step proof at	https://blog.ivanhabernal.com/2020-11-10-detailed-proof-of-laplace-mechanism-in-differential-privacy.html}
+
+\begin{figure}
+	\begin{tikzpicture}
+	
+	\begin{axis}[
+	xmin = -5, xmax = 5,
+	ymin = 0, ymax = 0.5,
+	xtick distance = 5,
+	ytick distance = 0.5,
+	grid = both,
+	minor tick num = 5,
+	major grid style = {lightgray},
+	minor grid style = {lightgray!25},
+	width = 0.9\textwidth,
+	height = 0.30\textwidth,
+	legend pos = north west
+	]
+	
+	\addplot[
+	domain = -5:5,
+	samples = 200,
+	smooth,
+	thick,
+	blue,
+	] {(1/2*1) * exp( - abs(x) / 1)};
+	
+		\addplot[
+	domain = -5:5,
+	samples = 200,
+	smooth,
+	thick,
+	red,
+	] {(1/2*1) * exp( - abs(x - 0.88) / 1)}; % no idea why x-1 produces a wrong plot :(
+	
+	\end{axis}
+	\end{tikzpicture}
+	\caption{Laplace PDFs for two means: $0$ and $1$ corresponding to the max difference of two datasets for counting queries with $\Delta f = 1$. Plotted for $\varepsilon = 1.0$.}
+\end{figure}
+
+
+
+\end{frame}
 
 \begin{frame}{Exponential mechanism for discrete outputs}
-	
+
+Given some arbitrary range (set) $\mathcal{R}$, the \textbf{exponential mechanism} is defined to some utility function $u: x \times \mathcal{R} \to \mathbb{R}$, which maps database/output pairs to utility scores
+
+
+We prefer that the mechanism outputs some element of $\mathcal{R}$ with the maximum possible utility score
+
+\begin{example}
+$x$ is a word, $\mathcal{R}$ is a set of words, the utility $u$ is some similarity or word $x$ and words in $\mathcal{R}$, e.g., a similarity of word embeddings (the higher, the better)
+\end{example}
+
+\begin{tikzpicture}[overlay, remember picture] 
+\node at (current page.north east)[anchor = north east, text width=4cm, yshift=-1.3cm] {\scriptsize Sampling from soft-max in language generation: \fullcite{Mattern.et.al.2022.Findings} \par};
+\end{tikzpicture}
+
+\end{frame}
+
+\begin{frame}{Exponential mechanism is $\varepsilon$-DP}
+Sensitivity of the utility score $\Delta u$ is defined
+$$
+\Delta u = \max_{\forall r \in \mathcal{R}, x, x'} |u(x, r) - u(y, r)|
+$$
+
+The exponential mechanism\footnote{
+For a step-by-step proof see https://blog.ivanhabernal.com/2021-06-30-detailed-proof-of-exponential-mechanism.html
+} $\mathcal{M}_E(x, u, \mathcal{R})$ selects and outputs an element $r \in \mathcal{R}$ with probability proportional to
+$$\exp \left( \frac{\varepsilon \cdot u(x,r)}{2\Delta u}\right)$$
+
 \end{frame}
 
 \section{Approximate DP}
@@ -374,20 +481,27 @@ $$
 \end{frame}
 
 
-\begin{frame}{XXX}
-	
-\end{frame}
+\section{Application of Differential Privacy in NLP}
 
-
-\begin{frame}{XXX}
-	
-\end{frame}
-
+\subsection{Publishing models trained with DP}
 
 \begin{frame}{XXX}
 	
 \end{frame}
 
+\subsection{Synthetic data generation with DP-trained models}
+
+\begin{frame}{XXX}
+	
+\end{frame}
+
+\subsection{Word-level privacy}
+
+\begin{frame}{XXX}
+	
+\end{frame}
+
+\subsection{Data publishing with local differential privacy}
 
 \begin{frame}{XXX}
 	
