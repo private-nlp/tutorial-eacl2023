@@ -100,13 +100,245 @@ Technical University of Darmstadt \hfill \texttt{www.trusthlt.org} }
 \maketitle
 
 
+% This block will introduce differential privacy, a mathematical framework for privacy protection \citep{Dwork.Roth.2013}. We will explain the typical setup (why this privacy approach has `differential' in its title) and the formal definitions. Then we will address some basic DP mechanisms and show their NLP applications. This part will involve a few mathematical proofs, but our aim is to make it low-barrier and accessible to a very broad audience.
 
+\section{Differential privacy: Setup and terminology}
 
-\section{Motivation}
+\begin{frame}{Trusted curator and dataset}
+	
+The basic settings: A \textbf{trusted curator} holds a \textbf{database} or \textbf{dataset} (i.e., a table) where
 
-\begin{frame}{XXX}
+\begin{itemize}
+	\item Each entry is linked to a single person
+	\item Each person in the dataset is linked to a single entry
+\end{itemize}
+
+In other words, the rows are completely independent
+
+\begin{table}
+	\begin{tabular}{lrll}
+		\toprule
+		Name & Income & Last facebook post & ... \\
+		\midrule
+		Alice & 60,000 & "I hate my job, ..." & ... \\
+		Bob & 90,000 & "Spending time with my ..." & ...\\
+		... & ... & ... & ...\\
+		\bottomrule
+	\end{tabular}
+\end{table}
 
 \end{frame}
+
+\begin{frame}{Datasets formally}
+	
+\begin{table}
+	\begin{tabular}{lrll}
+		\toprule
+		Name & Income & Last facebook post & ... \\
+		\midrule
+		Alice & 60,000 & "I hate my job, ..." & ... \\
+		Bob & 90,000 & "Spending time with my ..." & ...\\
+		... & ... & ... & ...\\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+\begin{block}{Dataset $x$ with $n$ individuals as a $n$-tuple}
+$$
+x = (x_1, x_2, \ldots, x_n)
+$$
+\end{block}
+
+Note: Many different notations, e.g., $D$, $X$, ...
+
+$x_1$ corresponds to Alice, $x_2$ to Bob, etc.
+
+\begin{tikzpicture}[overlay, remember picture] 
+\node at (current page.north east)[anchor = north east, text width=4cm, yshift=-1.3cm] {\scriptsize \fullcite{Vadhan.2017} \par};
+\end{tikzpicture}
+
+\end{frame}
+
+
+\begin{frame}{Neighboring datasets}
+
+\begin{block}{Definition of neighboring datasets}
+Neighboring datasets $x$ and $x'$ differ on one row
+\end{block}
+
+\begin{itemize}
+	\item Variant 1: $x$ and $x'$ have the same size ($|x| = |x'|$), one person is replaced
+	\item Variant 2: $|x'| = |x| \pm 1$, one person is removed or added
+\end{itemize}
+
+
+These two options will not protect the same thing.
+
+\begin{itemize}
+	\item Variant 1: will protect the value of the record
+	\item Variant 2: will also protect the presence of the record in the data
+\end{itemize}
+
+\begin{tikzpicture}[overlay, remember picture] 
+\node at (current page.north east)[anchor = north east, text width=4cm, yshift=-1.3cm] {\scriptsize \fullcite{Desfontaines.Pejo.2020} \par};
+\end{tikzpicture}
+
+
+\end{frame}
+
+
+\begin{frame}{Some examples of neighboring datasets $x$ and $x'$ (Variant 2)}
+	
+\begin{table}
+	\begin{tabular}{lrll}
+		\toprule
+		Alice & 60,000 & "I hate my job, ..." & ... \\
+		Bob & 90,000 & "Spending time with ..." & ...\\
+		Charlie & 50,000 & "Feeling great" & ...\\
+		\bottomrule
+	\end{tabular}
+	\caption{Dataset $x$}
+\end{table}
+\begin{table}
+	\begin{tabular}{lrll}
+		\toprule
+		Bob & 90,000 & "Spending time with ..." & ...\\
+		Charlie & 50,000 & "Feeling great" & ...\\
+		\bottomrule
+	\end{tabular}
+	\caption{Dataset $x'$}
+\end{table}	
+$$|x| = 3, |x'| = 2$$
+\end{frame}
+
+
+\begin{frame}{Some examples of neighboring datasets $x$ and $x'$ (Variant 1)}
+	
+\begin{table}
+	\begin{tabular}{lrll}
+		\toprule
+		Alice & 60,000 & "I hate my job, ..." & ... \\
+		\bottomrule
+	\end{tabular}
+	\caption{Dataset $x$}
+\end{table}
+\begin{table}
+	\begin{tabular}{lrll}
+		\toprule
+		Bob & 90,000 & "Spending time with ..." & ...\\
+		\bottomrule
+	\end{tabular}
+	\caption{Dataset $x'$}
+\end{table}	
+$$|x| = 1, |x'| = 1$$
+
+Note: Dataset of size 1 might look a bit extreme, but it follows the definition and will be useful for local DP.
+
+\end{frame}
+
+
+\begin{frame}{Query}
+An \textbf{analyst} or \textbf{adversary} wants to get information about a dataset $x$
+
+Numerical queries
+\begin{itemize}
+	\item Counting query: $f(x) \to \mathbb{N}$
+	\item Mean query: $f(x) \to \mathbb{R}$
+	\item General numerical query: $f(x) \to \mathbb{R}^k$
+\end{itemize}
+	
+Arbitrary queries
+\begin{itemize}
+	\item $f(x) \to \mathcal{Y}$
+\end{itemize}
+Transformation of the dataset $x$ to any object
+	
+\end{frame}
+
+
+\begin{frame}{Example of numeric queries}
+\begin{table}
+	\begin{tabular}{lrll}
+		\toprule
+		Alice & 60,000 & "I hate my job, ..." & ... \\
+		Bob & 90,000 & "Spending time with ..." & ...\\
+		Charlie & 50,000 & "Feeling great" & ...\\
+		\bottomrule
+	\end{tabular}
+	\caption{Dataset $x$}
+\end{table}	
+
+\begin{itemize}
+	\item Counting query: How many person? $f(x) = 3$
+	\item Mean query: Mean income? $f(x) = 6.667$
+	\item General numerical query: Histogram of word counts in all Facebook posts: $f(x) = \{\text{my}= 5, \text{the} = 4, \ldots\}$
+	\item Arbitrary query: Get copy of Facebook posts $f(x) = (\text{"I hate my job, ..."}, \ldots)$
+\end{itemize}
+
+	
+\end{frame}
+
+\begin{frame}{Further example queries}
+	\begin{table}
+		\begin{tabular}{lrll}
+			\toprule
+			Alice & 60,000 & "I hate my job, ..." & ... \\
+			Bob & 90,000 & "Spending time with ..." & ...\\
+			Charlie & 50,000 & "Feeling great" & ...\\
+			\bottomrule
+		\end{tabular}
+		\caption{Dataset $x$}
+	\end{table}	
+
+\begin{itemize}
+	\item Return Facebook posts $f(x) = (\text{"I hate my job, ..."}, \ldots)$
+	\item Use the income as a predicted variable $y_i$, use the Facebook text of $x_i$ as an input to a given neural network for income prediction, run a forward pass and backprop, and return the gradient: $f(x) = \left( \pdv{E}{w_1} = 0.02, \pdv{E}{w_2} = -24.9, \ldots \right)$
+\end{itemize}
+
+	
+\end{frame}
+
+
+\begin{frame}{XXX}
+	
+\end{frame}
+
+
+\begin{frame}{XXX}
+	
+\end{frame}
+
+
+\begin{frame}{XXX}
+	
+\end{frame}
+
+
+\begin{frame}{XXX}
+	
+\end{frame}
+
+
+\begin{frame}{XXX}
+	
+\end{frame}
+
+
+\begin{frame}{XXX}
+	
+\end{frame}
+
+
+\begin{frame}{XXX}
+	
+\end{frame}
+
+
+\begin{frame}{XXX}
+	
+\end{frame}
+
+
 
 \section*{Recap}
 
