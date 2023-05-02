@@ -10,7 +10,11 @@ EACL 2023 Tutorial on Privacy-preserving Natural Language Processing
 
 ### Block 2a: Defence with formal guarantees (60 min)
 
-> This block will introduce differential privacy, a mathematical framework for privacy protection \citep{Dwork.Roth.2013}. We will explain the typical setup (why this privacy approach has `differential' in its title) and the formal definitions. Then we will address some basic DP mechanisms and show their NLP applications. This part will involve a few mathematical proofs, but our aim is to make it low-barrier and accessible to a very broad audience.
+> This block will introduce differential privacy, a mathematical framework for privacy protection. We will explain the typical setup (why this privacy approach has `differential' in its title) and the formal definitions. Then we will address some basic DP mechanisms and show their NLP applications. This part will involve a few mathematical proofs, but our aim is to make it low-barrier and accessible to a very broad audience.
+
+* Slide deck [PDF](block-2a-1/pdf/eacl2023-privacy-nlp-tutorial-2a-1.pdf)
+* [LaTeX sources under CC-BY-SA](block-2a-1/latex)
+* Pre-recorded [YouTube video](https://www.youtube.com/watch?v=HCSqVwikv4U)
 
 > In the second part, we will introduce some cryptographic tools, namely homomorphic encryption and secure multiparty computation. The main focus will be on introducing the basics of lattice-based cryptography and homomorphic encryption and the most popular schemes (BGV, CKKS). We will go over the available libraries (PALISADE, HElib, SEAL) and dive into an NLP-specific example. 
 
