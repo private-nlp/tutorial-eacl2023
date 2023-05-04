@@ -7,6 +7,9 @@ EACL 2023 Tutorial on Privacy-preserving Natural Language Processing
 
 > This block will provide an overview why differential privacy is needed by introducing and discussing reconstruction attacks and examples of difference attacks \citep{Dinur-Nissim2003}. We will discuss how an algorithm can be blatantly non-private via an example from census data and explain inefficient and efficient attacks. We then discuss reconstruction attacks in practice for several cases \citep{Cohen2020LinearPR}. We conclude this block by briefly explaining some examples of tracing attacks \citep{Homer2008} and \citep{Dwork2015}.
 
+* Slide deck
+* Pre-recorded
+
 
 ### Block 2a: Defence with formal guarantees (60 min)
 
