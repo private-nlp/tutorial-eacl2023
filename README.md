@@ -36,6 +36,7 @@ EACL 2023 Tutorial on Privacy-preserving Natural Language Processing
 > Apart from privacy-preserving schemes that directly optimize for a given definition of privacy, there are given execution models and environments that help enhance privacy and are not by themselves privacy-preserving in a formal sense. This block will introduce privacy-enhancing methods such as federated learning, split learning and regularizer-based methods. Federated learning and split learning are both based on distributed learning and are great methods for application in enterprise and clinical setups. Regularizer based and private representation learning methods add extra terms to the loss function to limit the memorization and encoding of sensitive data within the model. 
 
 * Slide deck [PPTX](block-2b/eacl-tutorial.pptx)
+* Pre-recorded [YouTube video](https://www.youtube.com/watch?v=y3-PskEbyOE)
 
 ### Block 3: Privacy in industry (40 min)
 
