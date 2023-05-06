@@ -25,6 +25,10 @@ EACL 2023 Tutorial on Privacy-preserving Natural Language Processing
 
 > In the second part, we will introduce some cryptographic tools, namely homomorphic encryption and secure multiparty computation. The main focus will be on introducing the basics of lattice-based cryptography and homomorphic encryption and the most popular schemes (BGV, CKKS). We will go over the available libraries (PALISADE, HElib, SEAL) and dive into an NLP-specific example. 
 
+* Slide deck [PDF](block-2a-2/An%20Introduction%20to%20Homomorphic%20Encryption.pdf)
+* Slide deck [PPTX](block-2a-2/An%20Introduction%20to%20Homomorphic%20Encryption%20for%20Computational%20Linguists.pptx)
+
+
 ### Block 2b: Defences without formal guarantees (20 min)
 
 #### Presenter: Fatemeh Mireshghallah
